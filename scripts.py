@@ -63,14 +63,20 @@ def create_commendation(name, subject):
     random_commendation = commendation_types[random.randint(1, 30)]
     try:
         schoolkid = Schoolkid.objects.filter(full_name__startswith=name)[0]
+    except ObjectDoesNotExist:
+        print("Такого ученика не существует")
+    except MultipleObjectsReturned:
+        print('Слишко много учеников с таким именем')
+
+    try:
         subject_name = Subject.objects.filter(title=subject)[0]
+    except ObjectDoesNotExist:
+        print("Введите корректный предмет")
+
         lessons_6a = Lesson.objects.filter(subject__title=subject, year_of_study=6, group_letter="А")
         last_lesson = Lesson.objects.filter(subject__title=subject, year_of_study=6, group_letter="А").order_by(
             "date").last().date
         Commendation.objects.create(text=random_commendation, created=datetime.fromisoformat(str(last_lesson)),
                                     schoolkid=schoolkid, subject=subject_name, teacher=lessons_6a[0].teacher)
-    except ObjectDoesNotExist:
-        print("Такого ученика не существует")
-    except MultipleObjectsReturned:
-        print('Слишко много учеников с таким именем')
+
 
