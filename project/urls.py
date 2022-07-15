@@ -18,4 +18,5 @@ urlpatterns = [
         r'(?P<letter>[\w+ ]+)/'
         r'(?P<subject_id>[\w+ ]+)/$',
         views.view_journal, name='journal'),
+
 ]
