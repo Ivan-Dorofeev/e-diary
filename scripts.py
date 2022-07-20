@@ -8,7 +8,7 @@ from datacenter.models import Commendation, Lesson, Schoolkid, Subject
 def fix_marks(schoolkid_name):
     """Функция исправления оценки. Укажите имя ученика"""
     try:
-        choosed_schoolkid = Schoolkid.objects.filter(full_name__startswith=schoolkid_name).get()[0]
+        choosed_schoolkid = Schoolkid.objects.filter(full_name__startswith=schoolkid_name)[0]
         Mark.objects.filter(schoolkid=choosed_schoolkid, points__in=[2, 3]).update(points=5)
     except ObjectDoesNotExist:
         print("Такого ученика не существует")
@@ -16,10 +16,10 @@ def fix_marks(schoolkid_name):
         print('Слишко много учеников с таким именем')
 
 
-def remove_chastisements(schoolkid):
+def remove_chastisements(schoolkid_name):
     """Функция удаления плохого комментария. Укажите имя ученика"""
     try:
-        choosed_schoolkid = Schoolkid.objects.filter(full_name__startswith=schoolkid)[0]
+        choosed_schoolkid = Schoolkid.objects.filter(full_name__startswith=schoolkid_name)[0]
         Chastisement.objects.filter(schoolkid=choosed_schoolkid).delete()
     except ObjectDoesNotExist:
         print("Такого ученика не существует")
@@ -27,7 +27,7 @@ def remove_chastisements(schoolkid):
         print('Слишко много учеников с таким именем')
 
 
-def create_commendation(name, subject_name, year_of_class, group_of_class):
+def create_commendation(schoolkid_name, subject_name, year_of_class, group_of_class):
     """Функция слздания хорошего комментария. Укажите имя ученика и предмет"""
     commendation_types = ['Молодец', 'Отлично', 'Хорошо', 'Гораздо лучше, чем я ожидал!', 'Ты меня приятно удивил!',
                           'Великолепно!', 'Прекрасно!', 'Ты меня очень обрадовал!',
@@ -41,7 +41,7 @@ def create_commendation(name, subject_name, year_of_class, group_of_class):
                           'Теперь у тебя точно все получится!']
     random_commendation = choice(commendation_types)
     try:
-        schoolkid = Schoolkid.objects.filter(full_name__startswith=name)[0]
+        schoolkid = Schoolkid.objects.filter(full_name__startswith=schoolkid_name)[0]
     except ObjectDoesNotExist:
         print("Такого ученика не существует")
     except MultipleObjectsReturned:
